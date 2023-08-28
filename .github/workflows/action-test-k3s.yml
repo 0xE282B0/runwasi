@@ -39,7 +39,7 @@ jobs:
           name: test-image
           path: dist
       - name: run
-        run: make test/k3s
+        run: make test/k3s-${{ inputs.runtime }}
       - name: cleanup
         if: always()
         run: make test/k3s/clean

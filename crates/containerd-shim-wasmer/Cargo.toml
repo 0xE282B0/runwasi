@@ -1,0 +1,44 @@
+[package]
+name = "containerd-shim-wasmer"
+version.workspace = true
+edition.workspace = true
+
+[features]
+cranelift = ["wasmer-compiler"]
+
+[dependencies]
+wasmer = { version = "4.1.1" }
+wasmer-wasix = { version = "0.11.0" }
+wasmer-compiler = { version = "4.1.1", features = ["compiler"], optional = true }
+containerd-shim = { workspace = true }
+containerd-shim-wasm = { workspace = true, features = ["libcontainer_default"]}
+chrono = { workspace = true }
+libc = { workspace = true }
+log = { workspace = true }
+serde_json = { workspace = true }
+serde = { workspace = true }
+anyhow = { workspace = true }
+oci-spec = { workspace = true, features = ["runtime"] }
+tokio = "1.32.0"
+ttrpc = { workspace = true }
+
+[target.'cfg(unix)'.dependencies]
+libcontainer = { workspace = true }
+nix = { workspace = true }
+
+[dev-dependencies]
+tempfile = "3.7"
+libc = { workspace = true }
+env_logger = "0.10"
+
+[[bin]]
+name = "containerd-shim-wasmer-v1"
+path = "src/bin/containerd-shim-wasmer-v1/main.rs"
+
+[[bin]]
+name = "containerd-shim-wasmerd-v1"
+path = "src/bin/containerd-shim-wasmerd-v1/main.rs"
+
+[[bin]]
+name = "containerd-wasmerd"
+path = "src/bin/containerd-wasmerd/main.rs"
