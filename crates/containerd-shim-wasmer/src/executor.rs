@@ -96,9 +96,9 @@ impl WasmerExecutor {
 
         log::info!("Creating `WasiEnv`.... args: {:?}, envs: {:?}", args, envs);
         let mut wasi_env = WasiEnv::builder(&method)
-            // unknown command: /wasi-demo-app.wasm
             .args(args[1..].to_vec())
             .envs(envs)
+            .preopen_dir("/")?
             .finalize(&mut store)?;
 
         log::info!("Instantiating module with WASI imports...");
