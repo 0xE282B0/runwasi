@@ -1,9 +1,11 @@
+use std::env::set_var;
 use std::path::PathBuf;
 
 use containerd_shim_wasm::sandbox::oci::{self, Spec};
 use containerd_shim_wasm::sandbox::Stdio;
 use libcontainer::workload::{Executor, ExecutorError};
-use wasmer::{Cranelift, Instance, Module, Store};
+use wasmer::{Cranelift, Module, Store};
+use wasmer_wasix::capabilities::Capabilities;
 use wasmer_wasix::WasiEnv;
 
 use crate::oci_wasmer;
@@ -73,7 +75,7 @@ impl WasmerExecutor {
         self.stdio.redirect()?;
 
         log::info!("wasi context ready");
-        let (module_name, method) = oci::get_module(spec);
+        let (module_name, _method) = oci::get_module(spec);
         let module_name = match module_name {
             Some(m) => m,
             None => {
@@ -87,32 +89,21 @@ impl WasmerExecutor {
         let mut store = Store::new(self.engine.clone());
         let module = Module::from_file(&store, module_name)?;
 
-        log::info!("Starting `tokio` runtime...");
-        let runtime = tokio::runtime::Builder::new_multi_thread()
-            .enable_all()
-            .build()
-            .unwrap();
-        let _guard = runtime.enter();
-
-        log::info!("Creating `WasiEnv`.... args: {:?}, envs: {:?}", args, envs);
-        let mut wasi_env = WasiEnv::builder(EXECUTOR_NAME)
-            .args(args[1..].to_vec())
-            .envs(envs)
+        set_var("WASMER_DIR", "/");
+        let result = WasiEnv::builder(EXECUTOR_NAME)
             .preopen_dir("/")?
-            .finalize(&mut store)?;
+            .args(&args[1..])
+            .envs(envs)
+            .capabilities(Capabilities {
+                insecure_allow_all: true,
+                http_client: Capabilities::default().http_client,
+                threading: Capabilities::default().threading,
+            })
+            .run_with_store(module, &mut store);
 
-        log::info!("Instantiating module with WASI imports...");
-        let import_object = wasi_env.import_object(&mut store, &module)?;
-        let instance = Instance::new(&mut store, &module, &import_object)?;
-
-        wasi_env.initialize(&mut store, instance.clone())?;
-
-        log::info!("Call WASI `_start` function...");
-        let start_func = instance.exports.get_function(&method)?;
-        start_func.call(&mut store, &[])?;
-
-        wasi_env.cleanup(&mut store, None);
-
-        Ok(())
+        match result {
+            Ok(_) => std::process::exit(0),
+            Err(_e) => std::process::exit(137),
+        }
     }
 }
