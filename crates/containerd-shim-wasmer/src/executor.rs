@@ -95,7 +95,7 @@ impl WasmerExecutor {
         let _guard = runtime.enter();
 
         log::info!("Creating `WasiEnv`.... args: {:?}, envs: {:?}", args, envs);
-        let mut wasi_env = WasiEnv::builder(&method)
+        let mut wasi_env = WasiEnv::builder(EXECUTOR_NAME)
             .args(args[1..].to_vec())
             .envs(envs)
             .preopen_dir("/")?
