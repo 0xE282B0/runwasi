@@ -1,0 +1,22 @@
+[package]
+name = "containerd-shim-wamr"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+anyhow = { workspace = true }
+containerd-shim = { workspace = true }
+containerd-shim-wasm = { workspace = true }
+log = { workspace = true }
+oci-spec = { workspace = true, features = ["runtime"] }
+ttrpc = { workspace = true }
+
+wamr-sys = {git = "https://github.com/0xE282B0/wamr-sys"}
+
+[dev-dependencies]
+containerd-shim-wasm-test = { workspace = true }
+serial_test = "*"
+
+[[bin]]
+name = "containerd-shim-wamr-v1"
+path = "src/main.rs"

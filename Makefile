@@ -2,7 +2,7 @@ PREFIX ?= /usr/local
 INSTALL ?= install
 LN ?= ln -sf
 TEST_IMG_NAME ?= wasmtest:latest
-RUNTIMES ?= wasmedge wasmtime wasmer
+RUNTIMES ?= wasmedge wasmtime wasmer wamr
 export CONTAINERD_NAMESPACE ?= default
 
 TARGET ?= debug
