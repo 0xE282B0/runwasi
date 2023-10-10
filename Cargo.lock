@@ -598,7 +598,7 @@ dependencies = [
  "containerd-shim",
  "crossbeam",
  "libc",
- "libcontainer",
+ "libcontainer 0.2.0 (git+https://github.com/0xE282B0/youki?branch=libyouki-0.2.0)",
  "log",
  "nix 0.26.4",
  "oci-spec",
@@ -625,7 +625,7 @@ dependencies = [
  "dbus",
  "env_logger",
  "libc",
- "libcontainer",
+ "libcontainer 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "oci-spec",
  "serde_json",
@@ -647,7 +647,7 @@ dependencies = [
  "containerd-shim-wasm",
  "env_logger",
  "libc",
- "libcontainer",
+ "libcontainer 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "nix 0.26.4",
  "oci-spec",
@@ -673,7 +673,7 @@ dependencies = [
  "containerd-shim-wasm",
  "dbus",
  "env_logger",
- "libcontainer",
+ "libcontainer 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "oci-spec",
  "serde",
@@ -2054,6 +2054,20 @@ version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ebc75981724e1f7e065582ddfb1ef41bbe82c2d3afa130777fc41d75f386a0c6"
 dependencies = [
+ "fixedbitset 0.4.2",
+ "nix 0.26.4",
+ "oci-spec",
+ "procfs",
+ "serde",
+ "thiserror",
+ "tracing",
+]
+
+[[package]]
+name = "libcgroups"
+version = "0.2.0"
+source = "git+https://github.com/0xE282B0/youki?branch=libyouki-0.2.0#c8fe9ffa2b39edc0d2c399b2ecea23004338e72f"
+dependencies = [
  "dbus",
  "errno",
  "fixedbitset 0.4.2",
@@ -2080,7 +2094,33 @@ dependencies = [
  "fastrand",
  "futures",
  "libc",
- "libcgroups",
+ "libcgroups 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "nix 0.26.4",
+ "oci-spec",
+ "once_cell",
+ "prctl",
+ "procfs",
+ "regex",
+ "rust-criu",
+ "safe-path",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tracing",
+]
+
+[[package]]
+name = "libcontainer"
+version = "0.2.0"
+source = "git+https://github.com/0xE282B0/youki?branch=libyouki-0.2.0#c8fe9ffa2b39edc0d2c399b2ecea23004338e72f"
+dependencies = [
+ "bitflags 2.4.0",
+ "caps",
+ "chrono",
+ "fastrand",
+ "futures",
+ "libc",
+ "libcgroups 0.2.0 (git+https://github.com/0xE282B0/youki?branch=libyouki-0.2.0)",
  "libseccomp",
  "nix 0.26.4",
  "oci-spec",

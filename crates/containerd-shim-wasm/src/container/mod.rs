@@ -12,7 +12,7 @@
 
 mod context;
 mod engine;
-mod executor;
+pub mod executor;
 mod instance;
 mod path;
 
